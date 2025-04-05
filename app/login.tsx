@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
@@ -10,6 +10,7 @@ export default function LandingScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formError, setFormError] = useState('');
 
   const handleAuth = async () => {
     const endpoint = isSignUp ? '/signup' : '/login';
@@ -24,23 +25,22 @@ export default function LandingScreen() {
 
       const data = await res.json();
       if (!res.ok) {
-        Alert.alert('Error', data.error || 'Something went wrong');
+        setFormError(data.error || 'Something went wrong');
         return;
       }
 
-      // Save user info to device
       await AsyncStorage.setItem('user', JSON.stringify(data.user));
-      // go to maps page after logging in
       router.replace('/maps');
     } catch (err) {
       console.error(err);
-      Alert.alert('Error', 'Server error');
+      setFormError('Server error. Please try again later.');
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{isSignUp ? 'Sign Up' : 'Log In'}</Text>
+
       {isSignUp && (
         <TextInput
           placeholder="Username"
@@ -49,13 +49,16 @@ export default function LandingScreen() {
           style={styles.input}
         />
       )}
+
       <TextInput
         placeholder="Email"
         autoCapitalize="none"
+        keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
       />
+
       <TextInput
         placeholder="Password"
         secureTextEntry
@@ -63,8 +66,15 @@ export default function LandingScreen() {
         onChangeText={setPassword}
         style={styles.input}
       />
+
+      {formError.length > 0 && <Text style={styles.error}>{formError}</Text>}
+
       <Button title={isSignUp ? 'Sign Up' : 'Log In'} onPress={handleAuth} />
-      <Text style={styles.switch} onPress={() => setIsSignUp(!isSignUp)}>
+
+      <Text style={styles.switch} onPress={() => {
+        setIsSignUp(!isSignUp);
+        setFormError(''); // clear error when switching modes
+      }}>
         {isSignUp ? 'Already have an account? Log In' : 'New here? Sign Up'}
       </Text>
     </View>
@@ -76,4 +86,5 @@ const styles = StyleSheet.create({
   input: { borderBottomWidth: 1, marginBottom: 20, padding: 10 },
   switch: { marginTop: 20, textAlign: 'center', color: 'blue' },
   title: { fontSize: 24, textAlign: 'center', marginBottom: 30 },
+  error: { color: 'red', textAlign: 'center', marginBottom: 10 },
 });

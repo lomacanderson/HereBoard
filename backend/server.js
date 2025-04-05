@@ -34,9 +34,16 @@ pool.query(`
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
     try {
-      const existing = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-      if (existing.rows.length > 0) {
-        return res.status(400).json({ error: 'Email already registered. Try logging in.' });
+      // Check if email exists
+      const check = await pool.query('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username]);
+      if (check.rows.length > 0) {
+        const existing = check.rows[0];
+        if (existing.email === email) {
+          return res.status(400).json({ error: 'Email is already in use.' });
+        }
+        if (existing.username === username) {
+          return res.status(400).json({ error: 'Username is already taken.' });
+        }
       }
   
       const hashed = await bcrypt.hash(password, 10);
@@ -47,7 +54,7 @@ app.post('/signup', async (req, res) => {
       res.status(201).json({ user: result.rows[0] });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json({ error: 'Something went wrong on the server.' });
     }
   });
 
