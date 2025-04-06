@@ -91,10 +91,7 @@ app.post('/signup', async (req, res) => {
   
       // 3) Return a success message & user info (omit password)
       delete user.password;
-      res.json({
-        message: 'Login successful',
-        user
-      });
+      res.status(201).json(user);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
@@ -124,6 +121,7 @@ app.post('/signup', async (req, res) => {
     }
   });
 
+  // get the followers of the user id you pass in
   app.get('/users/:id/followers', async (req, res) => {
     const { id } = req.params;
   
@@ -144,6 +142,7 @@ app.post('/signup', async (req, res) => {
     }
    });
 
+   // get the following of the user id you pass in
    app.get('/users/:id/following', async (req, res) => {
     const { id } = req.params;
   
@@ -163,6 +162,7 @@ app.post('/signup', async (req, res) => {
     }
   });
 
+  // follow from one user to another
   app.post('/follow', async (req, res) => {
     const { follower_id, followed_id } = req.body;
   
@@ -183,7 +183,7 @@ app.post('/signup', async (req, res) => {
     }
   });
   
-  // --- Root Route (simple check) ---
+  // simple check to make sure its working
   app.get('/', (req, res) => {
     res.send('Hello from Supabase + Express!');
   });
