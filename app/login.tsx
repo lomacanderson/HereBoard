@@ -12,6 +12,8 @@ export default function LandingScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  
   // For displaying any error that occurs during form submission
   const [formError, setFormError] = useState('');
 

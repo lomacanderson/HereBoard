@@ -11,9 +11,9 @@ export default function MapScreen() {
       <Map
         mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={{
-          longitude: -122.4,
-          latitude: 37.8,
-          zoom: 12,
+          longitude: -123.2,
+          latitude: 44.5, 
+          zoom: 8.5,
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/logananderson/cm93ihuug003401sz8l0obh60"
