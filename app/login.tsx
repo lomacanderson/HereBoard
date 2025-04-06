@@ -86,7 +86,7 @@ export default function LandingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor : '#a6daff', padding: 20, height : '100%', paddingTop : 180},
+  container: { backgroundColor : '#a6daff', padding: 20, height : '100%', paddingTop : 100},
   input: { alignSelf : 'center', fontStyle : 'italic', width : 300, borderRadius: 25, borderWidth: 1, marginBottom: 20, padding: 10 },
   switch: { marginTop: 20, textAlign: 'center', color: 'blue' },
   title: { color: 'black', fontSize: 65, textAlign: 'center', marginBottom: 80, },

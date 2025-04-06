@@ -8,7 +8,7 @@ export default function Index() {
       <View style={styles.feed}>
         <Text style={styles.text}>Activity</Text>
 
-        <Link href="/friends" style={styles.feedBox}>
+        <Link href="/login" style={styles.feedBox}>
           Friend Example
         </Link>
         <Text>Hello</Text>
