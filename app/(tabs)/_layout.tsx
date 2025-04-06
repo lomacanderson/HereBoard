@@ -36,15 +36,15 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#ffd33d',
+        tabBarActiveTintColor: 'Black',
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="feed"
         options={{
-          title: 'Home',
+          title: 'Activity',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'list-sharp' : 'list-outline'} color={color} size={24} />
           ),
         }}
       />
