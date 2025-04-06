@@ -6,66 +6,88 @@ import { router } from 'expo-router';
 const API = 'http://localhost:3000';
 
 export default function Profile() {
+  // State variables for user, followers, following, modals and loading status
   const [user, setUser] = useState(null);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  // Logs out the user by clearing async storage and redirecting to login
   const handleLogout = async () => {
     await AsyncStorage.removeItem('user');
     router.replace('/login');
   };
 
-
+  // Loads user data and their followers/following from AsyncStorage and API
   useEffect(() => {
     const loadUserData = async () => {
+      console.log('[loadUserData] Running...');
+
+      // Get stored user info
       const stored = await AsyncStorage.getItem('user');
+      console.log('[AsyncStorage] stored:', stored);
+
+      // If not found, show warning and stop loading
       if (!stored) {
-        console.warn('No user found in AsyncStorage');
-        return;
-      }
-    
-      let parsed;
-      try {
-        parsed = JSON.parse(stored);
-      } catch (err) {
-        console.error('Invalid JSON in AsyncStorage "user":', stored);
+        console.warn('[AsyncStorage] No user found');
+        setLoading(false);
         return;
       }
 
+      const parsed = JSON.parse(stored); // Parse stored user JSON
+      setUser(parsed); // Set user state
 
-      setUser(parsed);
-    
       try {
+        // Fetch followers and following lists in parallel
         const [followersRes, followingRes] = await Promise.all([
           fetch(`${API}/users/${parsed.id}/followers`),
           fetch(`${API}/users/${parsed.id}/following`)
         ]);
-    
+
+        console.log('[Fetch] followersRes:', followersRes.status);
+        console.log('[Fetch] followingRes:', followingRes.status);
+
+        // Parse the results as JSON
         const followersData = await followersRes.json();
         const followingData = await followingRes.json();
-    
+
+        // Update states with fetched data
         setFollowers(followersData);
         setFollowing(followingData);
       } catch (err) {
-        console.error('Error fetching followers/following:', err);
+        console.error('[Fetch Error]', err);
       }
+
+      console.log('[loadUserData] Finished');
+      setLoading(false); // End loading
     };
 
-    loadUserData();
+    loadUserData(); // Trigger the load function
   }, []);
 
-  return (
-    <View style={styles.container}>
-      {user && (
+  // Display loading state if data hasn't finished loading
+  if (loading || !user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.username}>Loading...</Text>
+      </View>
+    );
+  } else {
+    // Main render once loading is complete and user data is available
+    return (
+      <View style={styles.container}>
         <>
+          {/* Profile picture */}
           <Image
             source={{ uri: user.profile_picture || 'https://via.placeholder.com/100' }}
             style={styles.avatar}
           />
+          {/* Username */}
           <Text style={styles.username}>{user.username}</Text>
 
+          {/* Followers and Following counts */}
           <View style={styles.countRow}>
             <TouchableOpacity onPress={() => setShowFollowers(true)}>
               <Text style={styles.count}>{followers.length} Followers</Text>
@@ -75,7 +97,7 @@ export default function Profile() {
             </TouchableOpacity>
           </View>
 
-          {/* Followers Modal */}
+          {/* Followers modal */}
           <Modal visible={showFollowers} animationType="slide">
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Followers</Text>
@@ -90,7 +112,7 @@ export default function Profile() {
             </View>
           </Modal>
 
-          {/* Following Modal */}
+          {/* Following modal */}
           <Modal visible={showFollowing} animationType="slide">
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Following</Text>
@@ -105,22 +127,22 @@ export default function Profile() {
             </View>
           </Modal>
         </>
-      )}
 
-      {/* Just padding */}
-      <Text style={styles.username}></Text>
+        {/* Padding & placeholder content */}
+        <Text style={styles.username}></Text>
+        <Text style={styles.username}>user's MAP</Text>
+        <Text style={styles.username}>users's Activity (comments/likes) in list view</Text>
 
-      <Text style={styles.username}>User's MAP</Text>
-
-      <Text style={styles.username}>User's Activity (comments/likes) in list view</Text>
-
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Log Out</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        {/* Logout button */}
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', alignItems: 'center', paddingTop: 80 },
   avatar: { width: 100, height: 100, borderRadius: 50, marginBottom: 10 },
