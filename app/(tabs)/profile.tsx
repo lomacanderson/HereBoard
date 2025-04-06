@@ -181,8 +181,8 @@ export default function Profile() {
 
 // Styles for the component
 const styles = StyleSheet.create({
-  container: { flex: 1,backgroundColor: '#fff', alignItems: 'flex-start', paddingBottom: 90, marginHorizontal:10},
-  container2: {flex: 1, flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', paddingTop: 80, marginHorizontal:10},
+  container: { flex: 1,backgroundColor: '#a6daff', alignItems: 'flex-start', paddingBottom: 90, marginHorizontal:0},
+  container2: {flex: 1, flexDirection: 'row', backgroundColor: '#a6daff', alignItems: 'center', paddingHorizontal:10, paddingTop: 80, marginHorizontal:0,},
   avatar: { width: 150, height: 150, borderRadius: 75, marginBottom: 10 },
   username: { fontSize: 35, fontWeight: 'bold', marginBottom: 10 },
   bio:{fontSize:15, height :150, width:250, },
