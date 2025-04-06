@@ -3,7 +3,6 @@ import { Platform, Text, View, StyleSheet } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 MapboxGL.setAccessToken('pk.eyJ1IjoibG9nYW5hbmRlcnNvbiIsImEiOiJjbTkzaWV0bGowbnRhMmlwcTZ0Z2o3MWxuIn0.tDgesYhh3uoP2LFnGhkqMg');
-MapboxGL.setConnected(true);
 MapboxGL.setTelemetryEnabled(false);
 MapboxGL.setWellKnownTileServer('Mapbox')
 
