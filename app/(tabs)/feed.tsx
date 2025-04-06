@@ -105,7 +105,7 @@ export default function Index() {
 
         {/* Example content */}
         <Link href="/login" style={styles.feedBox}>
-          Friend Example
+          *Rough* Friend Activity Example ->   John travled to Portland, OR and loved Portland City Grill
         </Link>
       </View>
     //</View>
@@ -122,10 +122,11 @@ const styles = StyleSheet.create({
   feedBox: {
     padding: 20,
     margin: 10,
-    width: '100%',
+    marginLeft:40,
+    width: '90%',
     height: '20%',
     borderRadius: 25,
-    backgroundColor: '#25292e',
+    backgroundColor: 'olivedrab',
     justifyContent: 'center',
     alignItems: 'center',
   },
