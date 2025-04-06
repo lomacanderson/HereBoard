@@ -7,6 +7,10 @@ export default function Index() {
     <View style={styles.container}>
       <View style={styles.feed}>
         <Text style={styles.text}>Activity</Text>
+
+        <Link href="/friends" style={styles.feedBox}>
+          Friend Example
+        </Link>
         <Text>Hello</Text>
       </View>
     </View>
@@ -19,6 +23,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#25292e',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  feedBox: {
+    padding: 20,
+    margin: 10,
+    width: '70%',
+    height: '20%',
+    borderRadius: 15,
+    flex: 1,
+    backgroundColor: '#25292e',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   feed: {
     padding: 20,
