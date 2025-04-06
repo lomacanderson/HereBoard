@@ -98,6 +98,16 @@ app.post('/signup', async (req, res) => {
     }
   });
   
+  app.get('/location/:id', async (req, res) => {
+    const { id } = req.params;
+      const location = locations.find(loc => loc.id === id);
+      if (!locationData) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(location);
+    });
+      res.json(userData);
+
   // Get current user by ID
   app.get('/user/:id', async (req, res) => {
     try {

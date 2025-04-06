@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text,TextInput, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
@@ -18,6 +18,12 @@ export default function Profile() {
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  //not working - FIXME
+  const [bio, setBio] = useState('')
+  const payload = bio
+
+  const [text, setText] = useState(''); // Initialize the state with an empty string
 
   // Logs out the user by clearing async storage and redirecting to login
   const handleLogout = async () => {
@@ -82,69 +88,85 @@ export default function Profile() {
   } else {
     // Main render once loading is complete and user data is available
     return (
-      <View style={styles.container}>
-        <>
-          {/* Profile picture */}
-          <Image
-            source={{ uri: user.profile_picture || 'https://via.placeholder.com/100' }}
-            style={styles.avatar}
+      <View style={styles.container2}>
+        <View style={styles.container}>
+          <>
+            {/* Profile picture Hard Coded*/}
+            <Image
+              source={{ uri: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}}
+              style={styles.avatar}
+            />
+            {/* Username */}
+            <Text style={styles.username}>{user.username}</Text>
+
+            {/* Followers and Following counts */}
+            <View style={styles.countRow}>
+              <TouchableOpacity onPress={() => setShowFollowers(true)}>
+                <Text style={styles.count}>{followers.length} Followers</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowFollowing(true)}>
+                <Text style={styles.count}>{following.length} Following</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Followers modal */}
+            <Modal visible={showFollowers} animationType="slide">
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Followers</Text>
+                <FlatList
+                  data={followers}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => <Text style={styles.modalItem}>{item.username}</Text>}
+                />
+                <TouchableOpacity onPress={() => setShowFollowers(false)}>
+                  <Text style={styles.closeButton}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
+            {/* Following modal */}
+            <Modal visible={showFollowing} animationType="slide">
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Following</Text>
+                <FlatList
+                  data={following}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => <Text style={styles.modalItem}>{item.username}</Text>}
+                />
+                <TouchableOpacity onPress={() => setShowFollowing(false)}>
+                  <Text style={styles.closeButton}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </>
+
+          {/* Padding & placeholder content */}
+          <Text style={styles.username}></Text>
+          <Text style={styles.subusername}>Bio</Text>
+  
+          <TextInput
+              style={styles.bio}
+              placeholder="Enter your text here..."
+              multiline={true}  // Enable multiline text input
+              numberOfLines={4}  // Set the default number of lines
+              onChangeText={(text) => setText(text)}  // Update text as user types
+              value={text}  // Value of the text input
           />
-          {/* Username */}
-          <Text style={styles.username}>{user.username}</Text>
+        
+          {/* Logout button */}
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
 
-          {/* Followers and Following counts */}
-          <View style={styles.countRow}>
-            <TouchableOpacity onPress={() => setShowFollowers(true)}>
-              <Text style={styles.count}>{followers.length} Followers</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowFollowing(true)}>
-              <Text style={styles.count}>{following.length} Following</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Followers modal */}
-          <Modal visible={showFollowers} animationType="slide">
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Followers</Text>
-              <FlatList
-                data={followers}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => <Text style={styles.modalItem}>{item.username}</Text>}
-              />
-              <TouchableOpacity onPress={() => setShowFollowers(false)}>
-                <Text style={styles.closeButton}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-
-          {/* Following modal */}
-          <Modal visible={showFollowing} animationType="slide">
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Following</Text>
-              <FlatList
-                data={following}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => <Text style={styles.modalItem}>{item.username}</Text>}
-              />
-              <TouchableOpacity onPress={() => setShowFollowing(false)}>
-                <Text style={styles.closeButton}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </>
-
-        {/* Padding & placeholder content */}
-        <Text style={styles.username}></Text>
-        <Text style={styles.username}>user's MAP</Text>
-        <Text style={styles.username}>users's Activity (comments/likes) in list view</Text>
-
-         <View style={{ flex: 1, width: '50%', height: '50%' }}>
+      
+        <View style={{ flex: 1, width: '100%', height: '100%'}}>
               <Map
                 mapboxAccessToken={MAPBOX_TOKEN}
                 initialViewState={{
-                  longitude: -122.4,
-                  latitude: 37.8,
-                  zoom: 12,
+                  longitude: -123.2,
+                  latitude: 44.5, 
+                  zoom: 8.5,
                 }}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
@@ -152,11 +174,6 @@ export default function Profile() {
                 <NavigationControl position="top-left" />
               </Map>
             </View>
-            
-        {/* Logout button */}
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Log Out</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -164,15 +181,19 @@ export default function Profile() {
 
 // Styles for the component
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center', paddingTop: 80 },
-  avatar: { width: 100, height: 100, borderRadius: 50, marginBottom: 10 },
-  username: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  container: { flex: 1,backgroundColor: '#fff', alignItems: 'flex-start', paddingBottom: 90, marginHorizontal:10},
+  container2: {flex: 1, flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', paddingTop: 80, marginHorizontal:10},
+  avatar: { width: 150, height: 150, borderRadius: 75, marginBottom: 10 },
+  username: { fontSize: 35, fontWeight: 'bold', marginBottom: 10 },
+  bio:{fontSize:15, height :150, width:250, },
+  subusername:{ fontSize: 25, marginBottom: 10 },
+  normaltext:{ fontSize: 15, marginBottom: 10 },
   countRow: { flexDirection: 'row', gap: 20 },
-  count: { fontSize: 18, color: '#007AFF', marginHorizontal: 10 },
+  count: { fontSize: 18, color: '#007AFF'},
   modalContainer: { flex: 1, paddingTop: 60, paddingHorizontal: 20 },
   modalTitle: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
   modalItem: { fontSize: 18, paddingVertical: 10 },
   closeButton: { fontSize: 18, color: 'blue', textAlign: 'center', marginTop: 20 },
-  logoutButton: { backgroundColor: '#FF3B30', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, marginTop: 20 },
+  logoutButton: { backgroundColor: 'crimson', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, marginTop: 20 },
   logoutText: { color: 'white', fontSize: 16, fontWeight: 'bold' }
 });
