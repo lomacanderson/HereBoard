@@ -81,7 +81,7 @@ export default function MapScreen() {
         initialViewState={{
           longitude: -123.2781,
           latitude: 44.5649,
-          zoom: 3,
+          zoom: 15,
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/logananderson/cm93ihuug003401sz8l0obh60"
