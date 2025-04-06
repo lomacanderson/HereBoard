@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
@@ -39,7 +39,8 @@ export default function LandingScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{isSignUp ? 'Sign Up' : 'Log In'}</Text>
+      <Text style={styles.title}>SpotShare</Text>
+      <Text style={styles.subtitle}>{isSignUp ? 'Sign Up' : 'Log In'}</Text>
 
       {isSignUp && (
         <TextInput
@@ -48,7 +49,7 @@ export default function LandingScreen() {
           onChangeText={setUsername}
           style={styles.input}
         />
-      )}
+      )} 
 
       <TextInput
         placeholder="Email"
@@ -69,7 +70,10 @@ export default function LandingScreen() {
 
       {formError.length > 0 && <Text style={styles.error}>{formError}</Text>}
 
-      <Button title={isSignUp ? 'Sign Up' : 'Log In'} onPress={handleAuth} />
+      <TouchableOpacity style={styles.submitButton} onPress={handleAuth}>
+        <Text style={styles.submitText}>{isSignUp ? 'Sign Up' : 'Log In'}</Text>
+      </TouchableOpacity>
+
 
       <Text style={styles.switch} onPress={() => {
         setIsSignUp(!isSignUp);
@@ -82,9 +86,12 @@ export default function LandingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, marginTop: 100 },
-  input: { borderBottomWidth: 1, marginBottom: 20, padding: 10 },
+  container: { backgroundColor : '#a6daff', padding: 20, height : '100%', paddingTop : 180},
+  input: { alignSelf : 'center', fontStyle : 'italic', width : 300, borderRadius: 25, borderWidth: 1, marginBottom: 20, padding: 10 },
   switch: { marginTop: 20, textAlign: 'center', color: 'blue' },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 30 },
-  error: { color: 'red', textAlign: 'center', marginBottom: 10 },
+  title: { color: 'black', fontSize: 65, textAlign: 'center', marginBottom: 80, },
+  subtitle: {color: 'black', fontSize: 23, textAlign: 'center', marginBottom: 25,},
+  submitButton: {alignSelf : 'center', backgroundColor: '#101411', width : 300, borderRadius: 25, marginBottom: 20, padding: 10},
+  submitText: {alignSelf : 'center', color : 'white', fontWeight : 'bold'},
+  error: { color: 'maroon', textAlign: 'center', marginBottom: 10 },
 });
