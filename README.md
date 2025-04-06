@@ -1,50 +1,19 @@
-# Welcome to your Expo app 👋
+# Welcome to SpotShare
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a small web app built for the OSU 2025 Hackathon
+Authors include: Logan Anderson, Aj Paumier, Dylan Keyhantaj, Ethan Ossana
 
-## Get started
+## Description
+SpotShare is a social platform based on mapping. Users can view 
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+Built on React Native, Expo, PostGreSQL, 
 
-2. Start the app
+## Images
+# Front
+![image](https://github.com/user-attachments/assets/946660fd-84cc-43ac-96d8-4859379f3414)
+# Friend Search
+![image](https://github.com/user-attachments/assets/ab04c032-65d9-43bb-a193-b8057d0507fd)
+# Profile
+![image](https://github.com/user-attachments/assets/84ce9e4a-0944-4af2-8ee1-9576bef12c79)
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
