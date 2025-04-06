@@ -110,9 +110,9 @@ export default function Profile() {
       {/* Just padding */}
       <Text style={styles.username}></Text>
 
-      <Text style={styles.username}>User's MAP</Text>
+      <Text style={styles.username}>{user.username}'s MAP</Text>
 
-      <Text style={styles.username}>User's Activity (comments/likes) in list view</Text>
+      <Text style={styles.username}>{user.username}'s Activity (comments/likes) in list view</Text>
 
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Log Out</Text>
