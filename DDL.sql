@@ -28,12 +28,12 @@ CREATE TABLE visit_users (
     PRIMARY KEY (visit_id, user_id)
 );
 
-CREATE TABLE followers (
-    following_user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    followed_user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    followed_at TIMESTAMP DEFAULT now(),
-    PRIMARY KEY (following_user_id, followed_user_id),
-    CHECK (following_user_id != followed_user_id)
+CREATE TABLE follows (
+  id SERIAL PRIMARY KEY,
+  follower_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  followed_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  CONSTRAINT unique_follow UNIQUE (follower_id, followed_id)
 );
 
 CREATE TABLE media (
