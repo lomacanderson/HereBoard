@@ -3,7 +3,12 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
+import Map, { NavigationControl } from 'react-map-gl/dist/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 const API = 'http://localhost:3000';
+
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibG9nYW5hbmRlcnNvbiIsImEiOiJjbTkzaWV0bGowbnRhMmlwcTZ0Z2o3MWxuIn0.tDgesYhh3uoP2LFnGhkqMg';
 
 export default function Profile() {
   // State variables for user, followers, following, modals and loading status
@@ -133,6 +138,21 @@ export default function Profile() {
         <Text style={styles.username}>user's MAP</Text>
         <Text style={styles.username}>users's Activity (comments/likes) in list view</Text>
 
+         <View style={{ flex: 1, width: '50%', height: '50%' }}>
+              <Map
+                mapboxAccessToken={MAPBOX_TOKEN}
+                initialViewState={{
+                  longitude: -122.4,
+                  latitude: 37.8,
+                  zoom: 12,
+                }}
+                style={{ width: '100%', height: '100%' }}
+                mapStyle="mapbox://styles/mapbox/streets-v11"
+              >
+                <NavigationControl position="top-left" />
+              </Map>
+            </View>
+            
         {/* Logout button */}
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutText}>Log Out</Text>
