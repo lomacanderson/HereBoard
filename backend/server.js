@@ -123,6 +123,65 @@ app.post('/signup', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   });
+
+  app.get('/users/:id/followers', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .select('follower_id, users!follows_follower_id_fkey(username)')
+        .eq('followed_id', id);
+  
+      if (error) throw error;
+  
+      // extract usernames
+      const followers = data.map(f => ({ username: f.users.username }));
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+   });
+
+   app.get('/users/:id/following', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .select('followed_id, users!follows_followed_id_fkey(username)')
+        .eq('follower_id', id);
+  
+      if (error) throw error;
+  
+      const following = data.map(f => ({ username: f.users.username }));
+      res.json(following);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post('/follow', async (req, res) => {
+    const { follower_id, followed_id } = req.body;
+  
+    if (follower_id === followed_id) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .insert([{ follower_id, followed_id }]);
+  
+      if (error) throw error;
+      res.status(201).json({ message: 'Followed successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
   
   // --- Root Route (simple check) ---
   app.get('/', (req, res) => {

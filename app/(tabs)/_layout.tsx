@@ -58,9 +58,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="friends"
+        name="profile"
         options={{
-          title: 'Friends',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
             <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={24}/>
           ),
