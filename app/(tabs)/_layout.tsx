@@ -53,7 +53,7 @@ export default function Layout() {
         options={{
           title: 'Map',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+            <Ionicons name={focused ? 'planet-sharp' : 'planet-outline'} color={color} size={24}/>
           ),
         }}
       />
@@ -62,7 +62,7 @@ export default function Layout() {
         options={{
           title: 'Friends',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+            <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={24}/>
           ),
         }}
       />
