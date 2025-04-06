@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import Map, { NavigationControl, Marker } from 'react-map-gl/dist/mapbox';
+import Map, { NavigationControl, Marker } from 'react-map-gl';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
