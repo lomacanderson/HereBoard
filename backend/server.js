@@ -4,7 +4,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const { Pool } = require('pg');
+
+// 1) Import createClient from supabase-js
+const { createClient } = require('@supabase/supabase-js');
+
+// 2) Initialize your Supabase client with the URL + API key
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 const app = express();
 const port = 3000;
@@ -12,71 +20,172 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-  });
-
-// Create users table if it doesn’t exist
-pool.query(`
-  CREATE TABLE IF NOT EXISTS users (
-    user_id SERIAL PRIMARY KEY,
-    username TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
-  );
-`);
-
+// --- Sign Up route ---
 app.post('/signup', async (req, res) => {
-    const { username, email, password } = req.body;
     try {
-      // Check if email exists
-      const check = await pool.query('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username]);
-      if (check.rows.length > 0) {
-        const existing = check.rows[0];
-        if (existing.email === email) {
-          return res.status(400).json({ error: 'Email is already in use.' });
-        }
-        if (existing.username === username) {
-          return res.status(400).json({ error: 'Username is already taken.' });
-        }
+      const { email, username, password } = req.body;
+  
+      // 1) Check if email or username already exists
+      const { data: existingUser, error: existingUserError } = await supabase
+        .from('users')
+        .select('id, email, username')
+        .or(`email.eq.${email},username.eq.${username}`);
+  
+      if (existingUserError) throw existingUserError;
+      if (existingUser && existingUser.length > 0) {
+        return res.status(400).json({
+          error: 'Email or username already in use.'
+        });
       }
   
-      const hashed = await bcrypt.hash(password, 10);
-      const result = await pool.query(
-        'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING user_id, username, email;',
-        [username, email, hashed]
-      );
-      res.status(201).json({ user: result.rows[0] });
+      // 2) Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // 3) Insert the new user
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert([
+          {
+            email,
+            username,
+            password: hashedPassword
+          }
+        ])
+        .select(); // returns the inserted rows
+  
+      if (insertError) throw insertError;
+  
+      // 4) Return the newly created user (omit the password in response)
+      const created = newUser[0];
+      delete created.password;
+      res.status(201).json(created);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Something went wrong on the server.' });
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  // --- Log In route ---
+  app.post('/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // 1) Find user by email
+      const { data: foundUsers, error: selectError } = await supabase
+        .from('users')
+        .select('id, email, username, password')
+        .eq('email', email);
+  
+      if (selectError) throw selectError;
+      if (!foundUsers || foundUsers.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const user = foundUsers[0];
+  
+      // 2) Compare passwords
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Incorrect password' });
+      }
+  
+      // 3) Return a success message & user info (omit password)
+      delete user.password;
+      res.json({
+        message: 'Login successful',
+        user
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  // Get current user by ID
+  app.get('/user/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('id, email, username, created_at')
+        .eq('id', id)
+        .single();
+  
+      if (error) throw error;
+      if (!userData) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      res.json(userData);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
     }
   });
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    const user = result.rows[0];
-    if (!user) return res.status(404).json({ error: 'User not found' });
+  app.get('/users/:id/followers', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .select('follower_id, users!follows_follower_id_fkey(username)')
+        .eq('followed_id', id);
+  
+      if (error) throw error;
+  
+      // extract usernames
+      const followers = data.map(f => ({ username: f.users.username }));
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+   });
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ error: 'Incorrect password' });
+   app.get('/users/:id/following', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .select('followed_id, users!follows_followed_id_fkey(username)')
+        .eq('follower_id', id);
+  
+      if (error) throw error;
+  
+      const following = data.map(f => ({ username: f.users.username }));
+      res.json(following);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
 
-    res.json({ message: 'Login successful', user: { id: user.id, username: user.username, email: user.email } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
-});
-
-app.get('/', (req, res) => {
-    res.send("Hello world!!!!!!");
-});
+  app.post('/follow', async (req, res) => {
+    const { follower_id, followed_id } = req.body;
+  
+    if (follower_id === followed_id) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+  
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .insert([{ follower_id, followed_id }]);
+  
+      if (error) throw error;
+      res.status(201).json({ message: 'Followed successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  // --- Root Route (simple check) ---
+  app.get('/', (req, res) => {
+    res.send('Hello from Supabase + Express!');
+  });
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

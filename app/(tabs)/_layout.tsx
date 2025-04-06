@@ -36,15 +36,15 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#ffd33d',
+        tabBarActiveTintColor: 'Black',
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="feed"
         options={{
-          title: 'Home',
+          title: 'Activity',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'list-sharp' : 'list-outline'} color={color} size={24} />
           ),
         }}
       />
@@ -53,16 +53,16 @@ export default function Layout() {
         options={{
           title: 'Map',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+            <Ionicons name={focused ? 'planet-sharp' : 'planet-outline'} color={color} size={24}/>
           ),
         }}
       />
       <Tabs.Screen
-        name="friends"
+        name="profile"
         options={{
-          title: 'Friends',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
-            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+            <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={24}/>
           ),
         }}
       />
