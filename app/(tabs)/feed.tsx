@@ -69,14 +69,14 @@ export default function Index() {
   };
 
   return (
-    <View style={styles.container}>
+    //<View style={styles.container}>
       <View style={styles.feed}>
-        <Text style={styles.text}>Activity</Text>
+        <Text style={styles.text}>Your Friend Activity</Text>
 
         {/* Search Input */}
         <TextInput
           style={styles.searchInput}
-          placeholder="Search users..."
+          placeholder="Search users...via username or email"
           value={search}
           onChangeText={handleSearch}
         />
@@ -107,34 +107,33 @@ export default function Index() {
         <Link href="/login" style={styles.feedBox}>
           Friend Example
         </Link>
-        <Text>Hello</Text>
       </View>
-    </View>
+    //</View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: 'clear',
     alignItems: 'center',
     justifyContent: 'center',
   },
   feedBox: {
     padding: 20,
     margin: 10,
-    width: '70%',
+    width: '100%',
     height: '20%',
-    borderRadius: 15,
+    borderRadius: 25,
     backgroundColor: '#25292e',
     justifyContent: 'center',
     alignItems: 'center',
   },
   feed: {
     padding: 20,
-    margin: 10,
-    width: '90%',
-    borderRadius: 10,
+    //marginVertical: 50,
+    height: '100%',
+    width: '100%',
     flex: 1,
     backgroundColor: '#DBF0FF',
   },
@@ -150,21 +149,21 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     marginVertical: 15,
-    borderRadius: 10,
+    borderRadius: 25,
     backgroundColor: '#fff',
   },
   resultItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
+    padding: 10,
+    borderBottomWidth: 2,
+    borderColor: 'dark',
   },
   resultText: {
     fontSize: 18,
   },
   followButton: {
-    color: '#007AFF',
+    color: 'royalblue',
     fontWeight: 'bold',
   },
 });
