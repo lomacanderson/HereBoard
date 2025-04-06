@@ -32,19 +32,31 @@ pool.query(`
 `);
 
 app.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    const hashed = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email;',
-      [username, email, hashed]
-    );
-    res.status(201).json({ user: result.rows[0] });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: 'User already exists or bad input' });
-  }
-});
+    const { username, email, password } = req.body;
+    try {
+      // Check if email exists
+      const check = await pool.query('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username]);
+      if (check.rows.length > 0) {
+        const existing = check.rows[0];
+        if (existing.email === email) {
+          return res.status(400).json({ error: 'Email is already in use.' });
+        }
+        if (existing.username === username) {
+          return res.status(400).json({ error: 'Username is already taken.' });
+        }
+      }
+  
+      const hashed = await bcrypt.hash(password, 10);
+      const result = await pool.query(
+        'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING user_id, username, email;',
+        [username, email, hashed]
+      );
+      res.status(201).json({ user: result.rows[0] });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Something went wrong on the server.' });
+    }
+  });
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
