@@ -5,10 +5,7 @@ import React = require('react');
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
-      <Link href="/maps" style={styles.button}>
-        Go to Map
-      </Link>
+      <Text style={styles.text}>Friends</Text>
     </View>
   );
 }
@@ -20,7 +17,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     text: {
-      color: '#fff',
+      color: 'red',
     },
     button: {
       fontSize: 20,
