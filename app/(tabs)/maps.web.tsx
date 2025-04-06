@@ -13,56 +13,56 @@ export default function MapScreen() {
       id: '1',
       coordinate: [-123.2786, 44.5647],
       name: 'Memorial Union',
-      description: 'Center of OSU campus',
+      description: 'Bob H.        John L.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '2',
       coordinate: [-123.2767, 44.5650],
       name: 'Valley Library',
-      description: 'Library at OSU',
+      description: 'Ethan O.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '3',
       coordinate: [-123.2808, 44.5632],
       name: 'Dixon Recreation Center',
-      description: 'Gym and fitness center',
+      description: 'Maria C.      Dylan K.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '4',
       coordinate: [-123.2796, 44.5658],
       name: 'Kelly Engineering Center',
-      description: 'Engineering building',
+      description: 'AJ P.       Bella U.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '5',
       coordinate: [-123.2813, 44.5658],
       name: 'Weatherford Hall',
-      description: 'Dormitory and conference center',
+      description: 'Trinity A.     Sophia M.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '6',
       coordinate: [-123.2816, 44.5594],
       name: 'Reser Stadium',
-      description: 'Football stadium',
+      description: 'Hunter S. ',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '7',
       coordinate: [-123.2738, 44.5635],
       name: 'International Living–Learning',
-      description: 'International Hall',
+      description: 'Logan A.',
       url: 'https://www.nyc.gov/',
     },
     {
       id: '8',
       coordinate: [-123.2781, 44.5649],
       name: 'MU Quad Lawn',
-      description: 'Grass',
+      description: 'Emily R.',
       url: 'https://www.nyc.gov/',
     },
   ];
@@ -81,7 +81,7 @@ export default function MapScreen() {
         initialViewState={{
           longitude: -123.2781,
           latitude: 44.5649,
-          zoom: 3,
+          zoom: 15,
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/logananderson/cm93ihuug003401sz8l0obh60"
