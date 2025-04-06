@@ -7,7 +7,7 @@ Created by: [Logan Anderson](https://github.com/lomacanderson), [Dylan Keyhantaj
 SpotShare is a map-based social platform that allows users to explore the world around them through their friend's experiences. As a user, you can see and interact with points of interest on the map marked by friends, log in and mark favorite spots of your own, leave reviews and ratings (wip) and more. 
 
 ## Stack
-Built on TypeScript, React Native, Expo, Node, PostgreSQL, and SupaBase.
+Built on TypeScript, React Native, Expo, Node, Express, PostgreSQL, and SupaBase.
 
 # Images
 ## Landing and Login Page 
