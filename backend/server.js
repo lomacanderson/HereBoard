@@ -171,12 +171,95 @@ app.post('/signup', async (req, res) => {
     }
   
     try {
-      const { data, error } = await supabase
+      // Check if this follow already exists
+      const { data: existingFollow, error: checkError } = await supabase
+        .from('follows')
+        .select('*')
+        .eq('follower_id', follower_id)
+        .eq('followed_id', followed_id)
+        .maybeSingle();
+  
+      if (checkError) throw checkError;
+      if (existingFollow) {
+        return res.status(400).json({ error: 'You already follow this user' });
+      }
+  
+      const { error } = await supabase
         .from('follows')
         .insert([{ follower_id, followed_id }]);
   
       if (error) throw error;
+  
       res.status(201).json({ message: 'Followed successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // unfollow route
+  app.post('/unfollow', async (req, res) => {
+    const { follower_id, followed_id } = req.body;
+  
+    try {
+      const { error } = await supabase
+        .from('follows')
+        .delete()
+        .eq('follower_id', follower_id)
+        .eq('followed_id', followed_id);
+  
+      if (error) throw error;
+  
+      res.status(200).json({ message: 'Unfollowed successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+// --- Enhanced search users by username/email with follow status ---
+app.get('/users/search', async (req, res) => {
+    const query = req.query.query;
+    const currentUserId = req.query.currentUserId;
+  
+    if (!query || query.trim().length < 2 || !currentUserId) {
+      return res.status(400).json({ error: 'Invalid search query or user ID' });
+    }
+  
+    try {
+      // Step 1: Fetch matching users
+      const { data: allUsers, error } = await supabase
+        .from('users')
+        .select('id, username, email')
+        .or(`username.ilike.%${query}%,email.ilike.%${query}%`);
+  
+      if (error) throw error;
+  
+      // Step 2: Get the list of IDs the current user is following
+      const { data: followingData, error: followingError } = await supabase
+        .from('follows')
+        .select('followed_id')
+        .eq('follower_id', currentUserId);
+  
+      if (followingError) throw followingError;
+  
+      const followingSet = new Set(followingData.map(f => f.followed_id));
+  
+      // Step 3: Attach follow status to each user
+      const withStatus = allUsers
+        .filter(u => u.id !== currentUserId) // Don't include self
+        .map(u => ({
+          ...u,
+          isFollowing: followingSet.has(u.id),
+        }))
+        .sort((a, b) => {
+          // Sort followed users first
+          if (a.isFollowing && !b.isFollowing) return -1;
+          if (!a.isFollowing && b.isFollowing) return 1;
+          return 0;
+        });
+  
+      res.json(withStatus);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
