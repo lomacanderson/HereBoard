@@ -79,9 +79,9 @@ export default function MapScreen() {
       <Map
         mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={{
-          longitude: -122.4,
-          latitude: 37.8,
-          zoom: 12,
+          longitude: -123.2781,
+          latitude: 44.5649,
+          zoom: 6,
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/logananderson/cm93ihuug003401sz8l0obh60"
@@ -136,11 +136,11 @@ const styles = StyleSheet.create({
   },
   markerName: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 10,
     textAlign: 'center',
   },
   markerDescription: {
-    fontSize: 12,
+    fontSize: 8,
     textAlign: 'center',
   },
 });
