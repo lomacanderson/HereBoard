@@ -1,19 +1,23 @@
 # Welcome to SpotShare
 
-This is a small web app built for the OSU 2025 Hackathon
-Authors include: Logan Anderson, Aj Paumier, Dylan Keyhantaj, Ethan Ossana
+SpotShare is a social web app built during Oregon State University's 2025 Hackathon!
+Created by: [Logan Anderson](https://github.com/lomacanderson), [Dylan Keyhantaj](https://github.com/slaiff), [Ethan Ossana](https://github.com/EthanHorizons), [Aj Paumier](https://github.com/20apaumier)
 
 ## Description
-SpotShare is a social platform based on mapping. Users can view 
+SpotShare is a map-based social platform that allows users to explore the world around them through their friend's experiences. As a user, you can see and interact with points of interest on the map marked by friends, log in and mark favorite spots of your own, leave reviews and ratings (wip) and more. 
 
+## Stack
+Built on TypeScript, React Native, Expo, Node, PostgreSQL, and SupaBase.
 
-Built on React Native, Expo, PostGreSQL, 
+# Images
+## Landing and Login Page 
+![image](https://github.com/user-attachments/assets/6c7c27ad-c75d-4bdd-99a4-352f8a96ee17)
+## Home / Map Page
+![image](https://github.com/user-attachments/assets/8c0e4638-fcec-4b67-8102-2a524316afe9)
+## Friend Search / Activity (WIP) 
+![image](https://github.com/user-attachments/assets/430d90f6-d9b1-4386-a75a-f55935593295)
+![image](https://github.com/user-attachments/assets/f4a3c7f7-e10b-4441-8c7a-d1314c6dc727)
+## Profile
+![image](https://github.com/user-attachments/assets/2f785d4c-df11-4fac-b6d2-da7e996e2702)
 
-## Images
-# Front
-![image](https://github.com/user-attachments/assets/946660fd-84cc-43ac-96d8-4859379f3414)
-# Friend Search
-![image](https://github.com/user-attachments/assets/ab04c032-65d9-43bb-a193-b8057d0507fd)
-# Profile
-![image](https://github.com/user-attachments/assets/84ce9e4a-0944-4af2-8ee1-9576bef12c79)
 
