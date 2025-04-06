@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 const API = 'http://localhost:3000';
 
@@ -10,6 +11,11 @@ export default function Profile() {
   const [following, setFollowing] = useState([]);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user');
+    router.replace('/login');
+  };
 
 
   useEffect(() => {
@@ -107,6 +113,10 @@ export default function Profile() {
       <Text style={styles.username}>User's MAP</Text>
 
       <Text style={styles.username}>User's Activity (comments/likes) in list view</Text>
+
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutText}>Log Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -121,4 +131,6 @@ const styles = StyleSheet.create({
   modalTitle: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
   modalItem: { fontSize: 18, paddingVertical: 10 },
   closeButton: { fontSize: 18, color: 'blue', textAlign: 'center', marginTop: 20 },
+  logoutButton: { backgroundColor: '#FF3B30', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, marginTop: 20 },
+  logoutText: { color: 'white', fontSize: 16, fontWeight: 'bold' }
 });
