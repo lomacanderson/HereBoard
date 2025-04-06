@@ -3,7 +3,7 @@ import { View, Text,TextInput, StyleSheet, Image, TouchableOpacity, Modal, FlatL
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
-import Map, { NavigationControl } from 'react-map-gl/dist/mapbox';
+import Map, { NavigationControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const API = 'http://localhost:3000';

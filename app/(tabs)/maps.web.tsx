@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import Map, { NavigationControl, Marker } from 'react-map-gl/dist/mapbox';
+import Map, { NavigationControl, Marker } from 'react-map-gl';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -79,9 +79,9 @@ export default function MapScreen() {
       <Map
         mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={{
-          longitude: -123.2,
-          latitude: 44.5, 
-          zoom: 8.5,
+          longitude: -123.2781,
+          latitude: 44.5649,
+          zoom: 3,
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/logananderson/cm93ihuug003401sz8l0obh60"
@@ -136,11 +136,11 @@ const styles = StyleSheet.create({
   },
   markerName: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 10,
     textAlign: 'center',
   },
   markerDescription: {
-    fontSize: 12,
+    fontSize: 8,
     textAlign: 'center',
   },
 });
